@@ -17,16 +17,30 @@ exports.registerNewUser = async(req, res) => {
     const token = await newUser.generateAuthToken();
     res.status(201).json({ message: 'User created successfully!', user, token });
   } catch(err){
-    res.status(400).json({ err: err});
+    res.status(400).json({ err: err.message });
     
   }
 }
 
-// TODO
 exports.loginUser = async(req,res) => {
+  try{
+    const email = req.body.email;
+    const password = req.body.password;
+    const user = await User.findByCredentials(email, password);
 
+    if(!user){
+      return res.status(401).json({error: 'Erro ao realizar o Login! Verifique as suas credenciais'})
+    }
+
+    const token = await user.generateAuthToken();
+    res.status(201).json({ message: 'Usuario(a) logado com sucesso!', user, token });
+
+  }catch(err){
+    res.status(400).json({ err: err.message });
+  }
 }
 
+//TODO
 exports.returnUserProfile = async(req, res) => {
-    
+  await res.json(req.userData)
 }

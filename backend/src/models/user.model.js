@@ -28,7 +28,7 @@ userSchema.pre('save', async function (next){
 });
 
 // ==> Esse metodo ira criar (gerar) uma autenticação auth para o 'User'
-userSchema.methods.generateAuthToken  = async function(){
+userSchema.methods.generateAuthToken = async function(){
  const user = this;
  const token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, 'secret');
  user.tokens = user.tokens.concat({ token });
@@ -38,7 +38,7 @@ userSchema.methods.generateAuthToken  = async function(){
 
 
 // ==> Esse método irá  fazer uma pesquisa por um 'User' por 'email' e 'password'
-userSchema.static.findByCredentials = async (email, password) => {
+userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email});
   console.log(user);
 
